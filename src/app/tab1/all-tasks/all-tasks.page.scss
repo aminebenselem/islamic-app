@@ -1,0 +1,189 @@
+/* ====== Core Transparency ====== */
+.transparent-content,
+.task-item,
+ion-item {
+  --background: transparent;
+}
+
+/* ====== Header Optimization ====== */
+ion-header {
+  margin-top: 20px;
+  --background: transparent;
+  --border-width: 0;
+
+  ion-toolbar {
+    --background: transparent;
+    --border-width: 0;
+    --min-height: 36px;
+    --padding-top: 2px;
+    --padding-bottom: 2px;
+  }
+  
+  ion-title {
+    font-size: 0.9rem;
+    --background: transparent;
+  }
+  
+  ion-back-button {
+    --min-height: 32px;
+  }
+}
+
+/* ====== Overlay ====== */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    120% 120% at 50% 0%,
+    rgba(0, 0, 0, 0.20) 0%,
+    rgba(0, 0, 0, 0.35) 60%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ====== Layout ====== */
+.tasks-wrap {
+  padding-top: 10vh;
+  padding-bottom: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 25vh;
+}
+
+.empty {
+  text-align: center;
+  padding: 36px 16px 28px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+
+
+.task-item ion-label h2.task-title {
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.task-item ion-label p.task-meta {
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+ion-item-option {
+  --background: rtransparent;
+  color: #fff;
+}
+/* ====== Glass Card (Real Transparency) ====== */
+ion-card.glass {
+  --background: rgba(255, 255, 255, 0.03); /* fixes the black */
+  --ion-item-background: transparent; /* ensures nested ion-item stays clear */
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  margin: 28px auto 0;
+  padding: 16px 20px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25),
+              inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  position: relative;
+  z-index: 2;
+  width: 360px;
+  max-width: 90vw;
+}
+
+/* Remove Ionic's shadow DOM background fallback */
+ion-list,
+ion-item {
+  --background: transparent !important;
+  --ion-item-background: transparent !important;
+}
+
+/* ====== Task Item Layout ====== */
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  --background: transparent;
+}
+
+/* ====== Checkbox Position ====== */
+.task-item ion-checkbox {
+  margin-left: auto; /* ensures it sticks to the far right */
+  align-self: center;
+  --background: rgba(255, 255, 255, 0.1);
+  --border-color: rgba(255, 255, 255, 0.4);
+  --checkmark-color: #fff;
+  --size: 22px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  --background: transparent;
+}
+
+/* Force the checkbox to hug the far right */
+ion-checkbox {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* In case Ionic still adds spacing inside the item */
+.task-item ion-label {
+  margin-right: 8px !important;
+}
+
+/* ====== Texts ====== */
+ion-select,
+ion-segment,
+ion-label,
+h2,
+p {
+  color: #fff;
+}
+
+/* ====== Button ====== */
+ion-button {
+  --background: transparent;
+  --background-activated: #ffffff33;
+  --border-width: 1px;
+  --border-style: solid;
+  --border-color: #fff;
+  --color: #fff;
+  border-radius: 25px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+ion-button:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ====== Responsiveness ====== */
+@media (max-width: 480px) {
+  .glass { width: 320px; }
+}
+
+@media (max-width: 380px) {
+  .glass { width: 290px; }
+}
+
+@media (max-width: 330px) {
+  .glass { width: 260px; }
+}
+
+/* ====== Backdrop Layer ====== */
+app-sky-animation {
+  position: relative;
+}

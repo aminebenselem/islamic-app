@@ -1,0 +1,408 @@
+ion-content {
+  --background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 🔹 Background Layer */
+.sky-background {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* 🔹 Foreground Layer */
+.content-overlay {
+  position: relative;
+  z-index: 10;
+  padding: 16px;
+  text-align: center;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ================================
+   🌙 GLASS CARDS (Quran & Tasks)
+================================ */
+.glass-card {
+  width: 95%;
+  padding: 20px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  }
+}
+
+/* Header */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .header-left {
+    h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin: 0;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 3px;
+    }
+  }
+
+  .header-icon {
+    font-size: 1.4rem;
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+/* Progress Bar */
+.progress-section {
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .progress-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+
+    .progress {
+      height: 100%;
+      background: linear-gradient(90deg, #00e0ff, #00ffa3);
+      border-radius: 10px;
+      transition: width 0.4s ease;
+    }
+  }
+
+  .progress-text {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.85);
+  }
+}
+
+/* Task List */
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  .task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    transition: background 0.25s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    input[type="checkbox"] {
+      accent-color: #00ffa3;
+      transform: scale(1.2);
+      margin-right: 10px;
+    }
+
+    .task-name {
+      flex: 1;
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .task-time {
+      font-size: 0.8rem;
+      color: #00ffa3;
+      font-weight: 500;
+    }
+  }
+}
+
+/* Footer */
+.card-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+
+  ion-button {
+    --color: #00ffa3;
+    font-size: 0.85rem;
+    --border-radius: 10px;
+  }
+}
+.quran-progress-card {
+  width: 95%;
+  padding: 18px 22px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.25);
+  color: #fff;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      ion-icon {
+        font-size: 1.3rem;
+        color: #00ffa3;
+      }
+
+      h3 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: 0.4px;
+      }
+    }
+
+    .percentage {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #00ffa3;
+    }
+  }
+
+  .progress-bar {
+    position: relative;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    overflow: hidden;
+
+    .progress {
+      height: 100%;
+      width: 72%;
+      border-radius: 20px;
+      background: linear-gradient(90deg, #00ffa3, #00e0ff);
+      box-shadow: 0 0 12px rgba(0, 255, 163, 0.6);
+      position: relative;
+      overflow: hidden;
+      animation: shimmer 3s infinite linear;
+    }
+
+ 
+  }
+
+  .details {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.85);
+  }
+}
+
+
+/* ================================
+   ☀️ SKY / SUN / MOON EFFECTS
+================================ */
+#sky {
+  background-color: #7fbbff;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 0;
+  opacity: 0.4;
+  transition: background-color 1s ease-in-out, opacity 1s ease-in-out;
+}
+
+#sun,
+#sunDay,
+#sunSet {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  transition: all 1s ease-in-out;
+}
+
+#sun {
+  background: radial-gradient(circle, rgba(249,249,28,1) 5%, rgba(247,214,46,1) 10%, rgba(248,200,95,1) 15%, rgba(115,130,133,1) 60%, rgba(24,75,106,1) 100%);
+}
+
+#sunDay {
+  background: radial-gradient(circle, rgba(252,255,251,0.9) 0%, rgba(253,250,219,0.4) 30%, rgba(226,219,197,0.01) 70%, rgba(201,165,132,0) 100%);
+}
+
+#sunSet {
+  background: radial-gradient(circle, rgba(236,255,0,1) 10%, rgba(253,50,41,1) 30%, rgba(243,0,0,1) 50%, rgba(93,0,0,1) 100%);
+  opacity: 0;
+}
+
+#moon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: url('../../../assets/1.0.svg') center/cover no-repeat;
+  box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.5);
+  position: absolute;
+  left: 50%;
+  top: 60px;
+  transform: translateX(-50%);
+  opacity: 0;
+  z-index: 10;
+  transition: all 1s ease-in-out;
+}
+
+#starsContainer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.star {
+  animation: twinkle 2s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.2; }
+}
+
+/* ================================
+   ☁️ CLOUDS
+================================ */
+/* ☁️ CLOUDS CONTAINER */
+.clouds {
+  position: absolute;
+  width: 280px;
+  z-index: 2;
+  opacity: 0.7;
+  animation: floatClouds 40s linear infinite;
+  filter: blur(1px); /* adds depth softness */
+}
+
+/* Position each group differently for variety */
+.cA { top: 25px; left: 10%; animation-delay: 0s; }
+.cB { top: 60px; left: 50%; animation-delay: 8s; }
+.cC { top: 90px; left: -20%; animation-delay: 16s; }
+
+/* ☁️ Single Cloud Shape */
+.cloud {
+  width: 150px;
+  height: 55px;
+  position: relative;
+  border-radius: 50px;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 70%, rgba(255,255,255,0.3) 100%);
+  box-shadow:
+    0 0 20px rgba(255, 255, 255, 0.4),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Smaller cloud parts to make it puffy */
+.cloud::before,
+.cloud::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: inherit;
+  box-shadow: inherit;
+}
+
+/* Left puff */
+.cloud::before {
+  width: 90px;
+  height: 90px;
+  top: -30px;
+  left: 15px;
+}
+
+/* Right puff */
+.cloud::after {
+  width: 70px;
+  height: 70px;
+  top: -20px;
+  left: 60px;
+}
+
+/* 🌬️ Floating Animation */
+@keyframes floatClouds {
+  0% {
+    transform: translateX(-30%);
+  }
+  100% {
+    transform: translateX(130%);
+  }
+}
+
+/* ================================
+   🌑 DARKNESS OVERLAY
+================================ */
+#darknessOverlaySky,
+#darknessOverlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,4,40,0.9));
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+/* ================================
+   📱 Responsive Adjustments
+================================ */
+@media (max-width: 600px) {
+  
+  .glass-card {
+    width: 92%;
+    padding: 12px 16px;
+  }
+
+  .card-header h3 {
+    font-size: 0.9rem;
+  }
+
+  .task-list li {
+    font-size: 0.85rem;
+  }
+
+  .moon {
+    width: 40px;
+    height: 40px;
+  }
+}

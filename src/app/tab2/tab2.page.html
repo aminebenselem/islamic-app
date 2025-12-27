@@ -1,0 +1,159 @@
+<ion-content [fullscreen]="true" class="transparent-content">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <app-sky-animation>
+      <div style="margin-top: 35%;">
+
+  <div class="calendar-container">
+    
+    <!-- Header -->
+   <div class="header glass">
+  <h1>Plan Your Day</h1>
+  <div class="header-actions">
+    <ion-button 
+      fill="clear" 
+      (click)="toggleCalendarType()"
+      class="calendar-toggle">
+
+      <ion-icon
+        name="swap-horizontal"
+        slot="end">
+      </ion-icon>
+     {{calendarType === 'gregorian' ? 'GR' : 'AR'}}
+    </ion-button>
+  </div>
+</div>
+
+
+    <!-- Month Navigation -->
+    <div class="month-navigation glass">
+      <ion-button fill="clear" (click)="previousMonth()">
+        <ion-icon name="chevron-back"></ion-icon>
+      </ion-button>
+      <div class="month-display">
+        <h2>{{ monthName }}</h2>
+        <p>{{ yearDisplay }}</p>
+      </div>
+      <ion-button fill="clear" (click)="nextMonth()">
+        <ion-icon name="chevron-forward"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="calendar-grid glass">
+      <div class="weekday-header">
+        <div class="weekday">Sun</div>
+        <div class="weekday">Mon</div>
+        <div class="weekday">Tue</div>
+        <div class="weekday">Wed</div>
+        <div class="weekday">Thu</div>
+        <div class="weekday">Fri</div>
+        <div class="weekday">Sat</div>
+      </div>
+      
+      <div class="calendar-days">
+        <div 
+          *ngFor="let calendarDay of calendarDays"
+          class="calendar-day"
+          [class.today]="calendarDay.isToday"
+          [class.selected]="calendarDay.isSelected"
+          [class.empty]="!calendarDay.day"
+          (click)="selectDate(calendarDay)">
+          <span class="day-number">{{ calendarDay.day }}</span>
+          <span *ngIf="calendarDay.tasksCount > 0" class="task-indicator">
+            {{ calendarDay.tasksCount }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task Section -->
+    <div *ngIf="selectedDate" class="task-section glass">
+      <div class="task-header">
+        <h3>{{ selectedDate | date:'fullDate' }}</h3>
+        <ion-button fill="clear" (click)="openTaskForm()">
+          <ion-icon name="add-circle"></ion-icon>
+        </ion-button>
+      </div>
+
+      <!-- Task Form -->
+      <div *ngIf="showTaskForm" class="task-form glass-inner">
+        <ion-item lines="none" class="transparent-item">
+          <ion-input 
+            [(ngModel)]="newTask.title" 
+            placeholder="Task title"
+            class="task-input">
+          </ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="transparent-item">
+          <ion-select 
+            [(ngModel)]="newTask.prayer_time" 
+            interface="popover"
+            placeholder="Prayer Time">
+            <ion-select-option 
+              *ngFor="let prayer of prayerTimes" 
+              [value]="prayer.value">
+              {{ prayer.icon }} {{ prayer.label }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item lines="none" class="transparent-item">
+          <ion-input 
+            [(ngModel)]="newTask.duration" 
+            type="number" 
+            placeholder="Duration (minutes)"
+            class="task-input">
+          </ion-input>
+        </ion-item>
+
+        <div class="form-buttons">
+          <ion-button fill="clear" (click)="closeTaskForm()">
+            Cancel
+          </ion-button>
+          <ion-button (click)="saveTask()" class="save-btn">
+            Save Task
+          </ion-button>
+        </div>
+      </div>
+
+      <!-- Task List -->
+      <div class="task-list">
+        <div 
+          *ngFor="let task of selectedDateTasks" 
+          class="task-item glass-inner">
+          <div class="task-content">
+            <div class="task-prayer">
+              <span class="prayer-icon">{{ getPrayerIcon(task.prayer_time) }}</span>
+              <span class="prayer-name">{{ getPrayerLabel(task.prayer_time) }}</span>
+            </div>
+            <h4>{{ task.title }}</h4>
+            <p *ngIf="task.duration" class="task-duration">
+              ⏱️ {{ task.duration }} minutes
+            </p>
+          </div>
+          <ion-button 
+            fill="clear" 
+            color="danger" 
+            (click)="deleteTask(task)">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </div>
+
+        <div *ngIf="selectedDateTasks.length === 0" class="no-tasks">
+          <p>No tasks scheduled for this day</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  </div>
+  </app-sky-animation>
+</ion-content>

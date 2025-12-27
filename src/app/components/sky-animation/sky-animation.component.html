@@ -1,0 +1,22 @@
+  <!-- 🔹 Background Layer (untouchable) -->
+  <div class="sky-background" aria-hidden="true">
+    <div id="sky"></div>
+    <div id="sun"></div>
+    <div id="sunDay"></div>
+    <div id="sunSet"></div>
+<div id="moon" [style.background]="moonBackground" ></div>
+    <div id="starsContainer"></div>
+    <div id="darknessOverlay"></div>
+    <div class="clouds cA"><div class="cloud"></div></div>
+    <div class="clouds cB"><div class="cloud"></div></div>
+    <div class="clouds cC"><div class="cloud"></div></div>
+  </div>
+
+  <!-- 🔹 Foreground Content -->
+  <div class="content-overlay">
+
+    <ng-content></ng-content>
+ 
+
+
+</div>

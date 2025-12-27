@@ -1,0 +1,320 @@
+<!-- tab4.page.html - OPTIMIZED VERSION -->
+<ion-header class="ion-no-border transparent-header">
+  <ion-toolbar class="transparent-toolbar">
+    <ion-title *ngIf="currentView === 'list'" class="arabic-title">
+      <div class="header-content">
+        <ion-icon name="book" class="header-icon"></ion-icon>
+        <span>القرآن الكريم</span>
+      </div>
+    </ion-title>
+    <ion-buttons slot="start" *ngIf="currentView === 'detail'">
+      <ion-button st (click)="backToList()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title *ngIf="currentView === 'detail'" class="arabic-title">
+      {{ selectedSurah?.surahNameArabic }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="transparent-content">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <app-sky-animation></app-sky-animation>
+
+  <div class="overlay"></div>
+  
+  <!-- Memorization Progress Card -->
+  <div class="progress-card glass-card" *ngIf="currentView === 'list'">
+    <div class="progress-header">
+      <ion-icon name="trophy" class="trophy-icon"></ion-icon>
+      <h3>حفظك للقرآن</h3>
+    </div>
+    <div class="progress-info">
+      <div class="progress-percentage">{{ getMemorizationPercentage() }}%</div>
+      <div class="progress-detail">{{ getTotalMemorizedAyahs() }} من {{ totalAyahsInQuran }} آية ({{ memorizedSurahs.size }} سورة)</div>
+    </div>
+    <ion-progress-bar 
+      [value]="getTotalMemorizedAyahs() / totalAyahsInQuran" 
+      class="custom-progress">
+    </ion-progress-bar>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-container" *ngIf="currentView === 'list'">
+    <ion-searchbar 
+      [(ngModel)]="searchQuery"
+      (ionInput)="searchSurahs()"
+      placeholder="ابحث عن سورة..."
+      class="glass-searchbar"
+      mode="ios">
+    </ion-searchbar>
+  </div>
+
+  <!-- Surah List -->
+  <div class="surah-list" *ngIf="currentView === 'list'">
+    <ion-card 
+      *ngFor="let surah of filteredSurahs; let i = index" 
+      class="surah-card glass-card"
+      (click)="openSurah(surah.surahNo || i + 1)">
+      
+      <ion-card-content>
+        <div class="surah-header">
+          <div class="surah-number-badge">
+            {{ surah.surahNo || i + 1 }}
+          </div>
+          
+          <div class="surah-info">
+            <div class="surah-name-arabic">{{ surah.surahNameArabic }}</div>
+            <div class="surah-details">
+              <span class="surah-name-english">{{ surah.surahName }}</span>
+              <span class="surah-separator">•</span>
+              <span class="surah-ayah-count">{{ surah.totalAyah }} آيات</span>
+            </div>
+            <div class="surah-translation">{{ surah.surahNameTranslation }}</div>
+          </div>
+
+          <div class="surah-actions">
+            <ion-button 
+              fill="clear" 
+              (click)="toggleMemorization(surah.surahNo || i + 1); $event.stopPropagation()"
+              class="memorize-btn">
+              <ion-icon 
+                [name]="memorizedSurahs.has(surah.surahNo || i + 1) ? 'checkmark-circle' : 'ellipse-outline'"
+                [class.memorized]="memorizedSurahs.has(surah.surahNo || i + 1)">
+              </ion-icon>
+            </ion-button>
+          </div>
+        </div>
+
+        <div class="revelation-badge" [class.mecca]="surah.revelationPlace === 'Mecca'">
+          {{ surah.revelationPlace === 'Mecca' ? 'مكية' : 'مدنية' }}
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Surah Detail View -->
+  <div class="surah-detail" *ngIf="currentView === 'detail'">
+    <ng-container *ngIf="selectedSurah">
+      
+      <!-- Surah Header -->
+      <div class="detail-header glass-card">
+        <h1 class="detail-surah-name">{{ selectedSurah.surahNameArabicLong }}</h1>
+        <p class="detail-translation">{{ selectedSurah.surahNameTranslation }}</p>
+        <div class="detail-info">
+          <span>{{ selectedSurah.revelationPlace === 'Mecca' ? 'مكية' : 'مدنية' }}</span>
+          <span>•</span>
+          <span>{{ selectedSurah.totalAyah }} آيات</span>
+        </div>
+        
+        <!-- View Mode Toggle and Jump Controls -->
+        <div class="view-controls">
+          <div class="view-toggle">
+            <ion-button 
+              [class.active]="viewMode === 'ayah'"
+              (click)="toggleViewMode('ayah')">
+              <ion-icon name="list" slot="start"></ion-icon>
+              آيات
+            </ion-button>
+            <ion-button 
+              [class.active]="viewMode === 'page'"
+              (click)="toggleViewMode('page')">
+              <ion-icon name="document-text" slot="start"></ion-icon>
+              صفحات
+            </ion-button>
+          </div>
+          
+          <div class="jump-controls" *ngIf="viewMode === 'ayah'">
+            <ion-input
+              type="number"
+              [(ngModel)]="jumpToAyahNumber"
+              [min]="1"
+              [max]="selectedSurah.totalAyah"
+              placeholder="رقم الآية"
+              class="glass-input">
+            </ion-input>
+            <ion-button (click)="jumpToAyah()" class="glass-button">
+              <ion-icon name="arrow-down-circle" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+
+          <div class="jump-controls" *ngIf="viewMode === 'page'">
+            <ion-input
+              type="number"
+              [(ngModel)]="jumpToPageNumber"
+              [min]="1"
+              [max]="604"
+              placeholder="رقم الصفحة"
+              class="glass-input">
+            </ion-input>
+            <ion-button (click)="jumpToPage()" class="glass-button">
+              <ion-icon name="arrow-down-circle" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+        
+        <!-- Surah Audio Player with Reciter Selection -->
+        <div class="surah-audio-player glass-card">
+          <div class="audio-controls">
+            <ion-button 
+              expand="block" 
+              class="play-surah-btn"
+              (click)="playSurahAudio()">
+              <ion-icon 
+                [name]="isPlayingSurah ? 'pause-circle' : 'play-circle'"
+                slot="start">
+              </ion-icon>
+              {{ isPlayingSurah ? 'إيقاف السورة' : 'تشغيل السورة كاملة' }}
+            </ion-button>
+            
+            <ion-button 
+              fill="outline"
+              class="reciter-btn"
+              (click)="toggleReciterList()">
+              <ion-icon name="person" slot="start"></ion-icon>
+              {{ getSelectedReciterName() }}
+              <ion-icon [name]="showReciterList ? 'chevron-up' : 'chevron-down'" slot="end"></ion-icon>
+            </ion-button>
+          </div>
+          
+          <!-- Reciter List -->
+          <div class="reciter-list" *ngIf="showReciterList">
+            <div 
+              *ngFor="let reciter of reciters"
+              class="reciter-item"
+              [class.selected]="selectedReciter === reciter.id"
+              (click)="selectReciter(reciter.id)">
+              <ion-icon 
+                [name]="selectedReciter === reciter.id ? 'radio-button-on' : 'radio-button-off'"
+                class="reciter-icon">
+              </ion-icon>
+              <div class="reciter-info">
+                <div class="reciter-name-arabic">{{ reciter.nameArabic }}</div>
+                <div class="reciter-name-english">{{ reciter.name }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <ion-button 
+          expand="block" 
+          class="memorize-toggle-btn"
+          (click)="toggleMemorization(selectedSurah.surahNo!)">
+          <ion-icon 
+            [name]="memorizedSurahs.has(selectedSurah.surahNo!) ? 'checkmark-circle' : 'ellipse-outline'"
+            slot="start">
+          </ion-icon>
+          {{ memorizedSurahs.has(selectedSurah.surahNo!) ? 'تم الحفظ' : 'ضع علامة كمحفوظة' }}
+        </ion-button>
+      </div>
+
+      <!-- Bismillah -->
+      <div class="bismillah glass-card" *ngIf="selectedSurah.surahNo! !== 1 && selectedSurah.surahNo! !== 9 && viewMode === 'ayah'">
+        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+      </div>
+
+      <!-- Ayah View -->
+      <div class="ayah-container" *ngIf="viewMode === 'ayah'">
+        <div class="loading-container small" *ngIf="ayahRendering">
+          <ion-spinner name="crescent"></ion-spinner>
+          <p>جارٍ عرض الآيات... {{ visibleAyahCount }}/{{ selectedSurah.totalAyah }}</p>
+        </div>
+        
+        <div 
+          *ngFor="let ayah of (selectedSurah.arabic1 | slice:0:visibleAyahCount); let i = index; trackBy: trackByAyahIndex" 
+          class="ayah-card glass-card"
+          [id]="'ayah-' + i">
+          
+          <div class="ayah-number-ornament">
+            <svg viewBox="0 0 100 100" class="ayah-star">
+              <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+              <text x="50" y="62" text-anchor="middle" fill="#fff" font-size="32" font-weight="700">{{ i + 1 }}</text>
+            </svg>
+          </div>
+
+          <p class="ayah-arabic">{{ ayah }}</p>
+          <p class="ayah-translation">{{ selectedSurah.english[i] }}</p>
+
+          <div class="ayah-actions">
+            <ion-button 
+              fill="clear" 
+              size="small"
+              (click)="playAudio(i)">
+              <ion-icon 
+                [name]="currentPlayingAyah === i ? 'pause-circle' : 'play-circle'"
+                slot="icon-only">
+              </ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page View -->
+      <div class="page-container" *ngIf="viewMode === 'page'">
+        <div class="page-navigation glass-card">
+          <ion-button fill="clear" (click)="previousPage()" [disabled]="currentPage === 1">
+            <ion-icon name="chevron-back"></ion-icon>
+          </ion-button>
+          <div class="page-number">صفحة {{ currentPage }}</div>
+          <div class="page-font-controls">
+            <ion-button fill="clear" size="small" (click)="decreasePageFont()" [disabled]="pageFontSizePx <= 18" title="تصغير الخط">
+              A-
+            </ion-button>
+            <ion-button fill="clear" size="small" (click)="increasePageFont()" [disabled]="pageFontSizePx >= 40" title="تكبير الخط">
+              A+
+            </ion-button>
+          </div>
+          <ion-button fill="clear" (click)="nextPage()" [disabled]="currentPage === 604">
+            <ion-icon name="chevron-forward"></ion-icon>
+          </ion-button>
+        </div>
+
+        <ng-template #pageLoadingTpl>
+          <div class="loading-container small">
+            <ion-spinner name="crescent"></ion-spinner>
+            <p>جارٍ تحميل الصفحة...</p>
+          </div>
+        </ng-template>
+
+        <div class="page-content glass-card" *ngIf="!pageLoading && pageData; else pageLoadingTpl">
+          
+          <p class="page-arabic-continuous" [ngStyle]="{'font-size.px': pageFontSizePx}">
+            <ng-container *ngFor="let ayah of pageData.ayahs; let i = index; trackBy: trackByPageAyahIndex">
+              <!-- Show surah name if this is the first ayah of a surah (excluding Al-Fatiha) -->
+              <ng-container *ngIf="shouldShowSurahName(ayah, i)">
+                <ng-container *ngIf="i > 0"><br class="surah-break"></ng-container>
+                <span class="page-surah-name">{{ getSurahNameForPageStart(ayah) }}</span><br class="surah-name-break">
+              </ng-container>
+              
+              <!-- Check if ayah starts with Basmala -->
+              <ng-container *ngIf="isBasmalaAtStart(ayah.text, ayah); else normalAyah">
+                <span class="ayah-chunk basmala">{{ getBasmalaText(ayah.text) }}</span><br class="bismillah-break">
+                <span class="ayah-chunk">{{ getAfterBasmalaText(ayah.text) }}</span>
+                <span class="page-ayah-number">﴿{{ ayah.numberInSurah }}﴾</span>
+              </ng-container>
+              <ng-template #normalAyah>
+                <span class="ayah-chunk">{{ ayah.text }}</span>
+                <span class="page-ayah-number">﴿{{ ayah.numberInSurah }}﴾</span>
+                <ng-container *ngIf="isLastAyahInSurah(ayah) && !nextAyahStartsWithBasmala(i)"><br class="surah-break"></ng-container>
+              </ng-template>
+            </ng-container>
+          </p>
+        </div>
+      </div>
+      
+    </ng-container>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="loading-container" *ngIf="loading">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+</ion-content>

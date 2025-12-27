@@ -1,0 +1,75 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
+    </ion-buttons>
+    <ion-title>All Tasks</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="transparent-content" [fullscreen]="true">
+  <app-sky-animation>   </app-sky-animation>
+
+    <div class="overlay"></div>
+
+    <div class="tasks-wrap">
+      <div class="center" *ngIf="loading">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+
+     <ion-card class="glass" *ngIf="!loading">
+      <ion-segment [(ngModel)]="filter" (ionChange)="applyFilter()">
+  <ion-segment-button value="all">
+    <ion-label>All</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="done">
+    <ion-label>Done</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="undone">
+    <ion-label>Undone</ion-label>
+  </ion-segment-button>
+</ion-segment>
+
+  <ion-list lines="inset" *ngIf="tasks.length > 0; else emptyState">
+  <ion-item-sliding *ngFor="let task of filteredTasks; trackBy: trackById">
+    
+    <ion-item class="task-item">
+      <ion-label>
+        <h2 class="task-title">{{ task.title || (task.prayer_time | titlecase) }}</h2>
+        <strong class="task-meta">
+          After {{ task.prayer_time | titlecase }} • {{ task.date | date: 'mediumDate' }}
+        </strong>
+        <br />
+        <span class="task-meta">{{ task.duration }} min</span>
+      </ion-label>
+
+      <ion-checkbox
+        slot="end"
+        [checked]="task.completed"
+        (ionChange)="toggleCompleted(task, $event.detail.checked)">
+      </ion-checkbox>
+    </ion-item>
+
+    <ion-item-options side="end">
+      <ion-item-option  (click)="rescheduleTask(task)">
+        <ion-icon name="calendar-outline" slot="icon-only"></ion-icon>
+      </ion-item-option>
+      <ion-item-option (click)="deleteTask(task)">
+        <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+      </ion-item-option>
+    </ion-item-options>
+
+  </ion-item-sliding>
+</ion-list>
+
+
+  <ng-template #emptyState>
+    <div class="empty">
+      <ion-icon name="checkmark-circle-outline"></ion-icon>
+      <p>No tasks yet</p>
+    </div>
+  </ng-template>
+</ion-card>
+
+    </div>
+</ion-content>

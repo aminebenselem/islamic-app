@@ -1,0 +1,344 @@
+.transparent-content {
+  --background: transparent;
+}
+
+
+
+.glass {
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  width: 90vw; /* 90% of viewport width */
+  max-width: 400px; /* good fit for most phones (360–430px) */
+  margin-left: auto;
+  margin-right: auto;
+  flex: 0 0 auto;
+  min-width: 0;
+  box-sizing: border-box;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* For tablets or landscape mode */
+@media (min-width: 600px) {
+  .glass {
+    max-width: 550px;
+  }
+}
+
+/* For large screens or desktops */
+@media (min-width: 900px) {
+  .glass {
+    max-width: 700px;
+  }
+}
+
+/* Optional: keep inner content visually centered */
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+
+.glass-inner {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  gap: 12px;
+  min-height: 60px;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.header:hover {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 26px rgba(0, 0, 0, 0.35);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #beb3b3;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  white-space: nowrap;
+  overflow: hidden;
+   font-family: monospace;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.header ion-button.calendar-toggle,
+.header ion-button.sign-out-btn {
+  --background: rgba(255, 255, 255, 0.15);
+  --color: white;
+  --border-radius: 12px;
+ 
+  font-size: 15px;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.header ion-button.calendar-toggle:hover,
+.header ion-button.sign-out-btn:hover {
+  transform: scale(1.05);
+  --background: rgba(255, 255, 255, 0.25);
+}
+
+.header ion-icon {
+  font-size: 20px;
+  color: white;
+  opacity: 0.9;
+}
+
+
+.month-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  ion-button {
+    --color: white;
+  }
+  
+  .month-display {
+    text-align: center;
+    
+    h2 {
+      margin: 0;
+      font-size: 22px;
+      color: white;
+      font-weight: 600;
+    }
+    
+    p {
+      margin: 5px 0 0;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+}
+
+.calendar-grid {
+  .weekday-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+    
+    .weekday {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 0;
+    }
+  }
+  
+  .calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+  }
+  
+  .calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    border: 2px solid transparent;
+    
+    &:not(.empty):hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.05);
+    }
+    
+    &.today {
+      border-color: rgba(255, 215, 0, 0.6);
+      background: rgba(255, 215, 0, 0.1);
+    }
+    
+    &.selected {
+      border-color: rgba(100, 200, 255, 0.8);
+      background: rgba(100, 200, 255, 0.2);
+    }
+    
+    &.empty {
+      background: transparent;
+      cursor: default;
+    }
+    
+    .day-number {
+      color: white;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    
+    .task-indicator {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: rgba(76, 175, 80, 0.9);
+      color: white;
+      font-size: 10px;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+  }
+}
+
+.task-section {
+  .task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    
+    h3 {
+      margin: 0;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    ion-button {
+      --color: white;
+    }
+  }
+  
+  .task-form {
+    margin-bottom: 20px;
+    
+    .transparent-item {
+      --background: transparent;
+      --border-color: rgba(255, 255, 255, 0.2);
+      margin-bottom: 10px;
+      
+      ion-input, ion-select {
+        --color: white;
+        --placeholder-color: rgba(255, 255, 255, 0.6);
+      }
+    }
+    
+    .form-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 15px;
+      
+      ion-button {
+        --color: white;
+      }
+      
+      .save-btn {
+        --background: rgba(76, 175, 80, 0.3);
+      }
+    }
+  }
+  
+  .task-list {
+    max-height: 400px;
+    overflow-y: auto;
+    
+    .task-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+      .task-content {
+        flex: 1;
+            overflow-y: auto;
+
+        .task-prayer {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 8px;
+          
+          .prayer-icon {
+            font-size: 20px;
+          }
+          
+          .prayer-name {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+            font-weight: 500;
+          }
+        }
+        
+        h4 {
+          margin: 0 0 5px;
+          color: white;
+          font-size: 16px;
+          font-weight: 600;
+        }
+        
+        .task-duration {
+          margin: 0;
+          color: rgba(255, 255, 255, 0.7);
+          font-size: 13px;
+        }
+      }
+      
+      ion-button {
+        --color: #ff6b6b;
+      }
+    }
+    
+    .no-tasks {
+      text-align: center;
+      padding: 40px 20px;
+      
+      p {
+        color: rgba(255, 255, 255, 0.6);
+        font-style: italic;
+      }
+    }
+  }
+}
+
+/* Ensure the main container doesn't stretch children beyond 100% */
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%; /* ensure 90% cards compute from full width, not content width */
+}

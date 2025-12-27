@@ -1,0 +1,97 @@
+<ion-content [fullscreen]="true" class="transparent-content">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <app-sky-animation></app-sky-animation>
+
+  <div class="content-wrapper" *ngIf="!loading; else loadingTpl">
+    <!-- Prayer times swiper -->
+    <div class="swiper-section">
+      <swiper-container
+        #swiper
+        [loop]="true"
+        [centeredSlides]="true"
+        [slidesPerView]="2.3"
+        [spaceBetween]="20"
+        [speed]="500"
+      >
+        <swiper-slide *ngFor="let prayer of prayers">
+          <div class="prayer-slide" [class.active]="prayer.name === activePrayer?.name">
+            <div class="time">{{ prayer.time }}</div>
+            <div class="name">{{ prayer.name === 'tomorrowFajr' ? 'Tomorrow Fajr' : prayer.name }}</div>
+          </div>
+        </swiper-slide>
+      </swiper-container>
+    </div>
+
+    <!-- Qur’an Progress Card -->
+    <div class="quran-progress-card glass-card">
+      <div class="header">
+        <div class="title">
+          <ion-icon name="book-outline"></ion-icon>
+          <h3>Qur’an Progress</h3>
+        </div>
+        <span class="percentage">{{ quranProgressPercentage }}%</span>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress" [style.width.%]="quranProgressPercentage"></div>
+      </div>
+
+      <p class="details">Memorized {{ quranTotalMemorizedAyahs }} / 6236 ayahs</p>
+    </div>
+
+    <!-- Upcoming Tasks -->
+    <div class="glass-card">
+      <div class="card-header">
+        <div class="header-left">
+          <h3>Upcoming Tasks</h3>
+          <p class="subtitle">Stay consistent today </p>
+        </div>
+        <ion-icon name="calendar-outline" class="header-icon"></ion-icon>
+      </div>
+
+      <div class="progress-section">
+        <div class="progress-bar">
+          <div class="progress" [style.width.%]="progressPercentage"></div>
+        </div>
+        <span class="progress-text">{{ progressPercentage }}% Completed</span>
+      </div>
+
+      <ul class="task-list" *ngIf="tasks.length > 0; else noTasksTpl">
+  <li *ngFor="let task of tasks">
+    <label class="task-item">
+      <input
+        type="checkbox"
+        [(ngModel)]="task.completed"
+        (change)="toggleTaskCompletion(task)"
+      />
+      <span class="task-name">{{ task.title }}</span>
+      <span class="task-time">After {{ task.prayer_time }}</span>
+    </label>
+  </li>
+</ul>
+
+
+      <ng-template #noTasksTpl>
+        <p class="empty-tasks">You are totally free ,go pray or do something</p>
+      </ng-template>
+
+      <div class="card-footer">
+        <ion-button fill="clear" size="small" (click)="viewAllTasks()">View All</ion-button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loadingTpl>
+    <div class="loading-state">
+      <ion-spinner></ion-spinner>
+      <p>Loading your data...</p>
+    </div>
+  </ng-template>
+</ion-content>

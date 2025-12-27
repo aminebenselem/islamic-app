@@ -1,0 +1,20 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Reschedule Task</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-datetime
+    presentation="date-time"
+    [value]="date"
+    (ionChange)="date = $any($event.detail).value">
+  </ion-datetime>
+
+  <ion-button expand="block" color="primary" (click)="confirm()">
+    Confirm
+  </ion-button>
+</ion-content>

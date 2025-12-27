@@ -1,0 +1,61 @@
+<ion-content class="settings-content">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <app-sky-animation>
+<div style="margin-top: 35%;">
+<ion-card class="user-card glass">
+  <ion-item lines="none">
+    <ion-avatar slot="start">
+      <img [src]="avatar_url" />
+    </ion-avatar>
+
+    <ion-label>
+      <div>{{ userEmail }}</div>
+      <p>User Profile</p>
+    </ion-label>
+
+    <!-- Icon-only logout button -->
+    <ion-button slot="end" fill="clear" (click)="logout()">
+      <ion-icon name="log-out-outline"></ion-icon>
+    </ion-button>
+  </ion-item>
+</ion-card>
+
+
+  <ion-list class="glass">
+
+    <ion-item>
+      <ion-label>Theme</ion-label>
+      <ion-select [(ngModel)]="selectedTheme" (ionChange)="applyTheme(selectedTheme)">
+        <ion-select-option value="system">Auto (Prayer Times)</ion-select-option>
+        <ion-select-option value="fajr">Fajr</ion-select-option>
+        <ion-select-option value="sunrise">Sunrise</ion-select-option>
+        <ion-select-option value="dhuhr">Dhuhr</ion-select-option>
+        <ion-select-option value="asr">Asr</ion-select-option>
+        <ion-select-option value="sunset">Sunset</ion-select-option>
+        <ion-select-option value="maghrib">Maghrib</ion-select-option>
+        <ion-select-option value="isha">Isha</ion-select-option>
+        <ion-select-option value="midnight">Midnight</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Language</ion-label>
+      <ion-segment [(ngModel)]="selectedLang" (ionChange)="switchLanguage(selectedLang)">
+        <ion-segment-button value="en">EN</ion-segment-button>
+        <ion-segment-button value="ar">AR</ion-segment-button>
+      </ion-segment>
+    </ion-item>
+
+  </ion-list>
+
+ 
+  </div>
+  </app-sky-animation>
+</ion-content>
