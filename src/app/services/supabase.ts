@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { SupabaseClient, createClient, Session, User } from '@supabase/supabase-js';
 import { BehaviorSubject } from 'rxjs';
 import { format } from 'date-fns';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +13,8 @@ export class SupabaseService {
   public user$ = new BehaviorSubject<User | null>(null);
 
   constructor() {
-   const SUPABASE_URL = 'https://annjtbfjooqjvbefbljx.supabase.co';
-   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubmp0YmZqb29xanZiZWZibGp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3ODU2NDcsImV4cCI6MjA3NzM2MTY0N30.hXvX_MuIS3foNc2r-hXh8nPO3yvwnyc85jmNE_GeZIc';
+    const SUPABASE_URL = environment.supabaseUrl;
+    const SUPABASE_KEY = environment.supabaseAnonKey;
    this.supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
      realtime: {
        params: {

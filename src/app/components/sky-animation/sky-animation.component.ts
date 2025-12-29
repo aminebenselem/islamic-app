@@ -5,6 +5,7 @@ import { getCountryAndCity } from 'src/helpers/location';
 import { SupabaseService } from 'src/app/services/supabase';
 import { Router } from '@angular/router';
 import { ThemeService } from 'src/app/services/theme.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-sky-animation',
@@ -17,8 +18,7 @@ export class SkyAnimationComponent implements OnInit, OnDestroy {
   moonBackground: string = "url('../../../assets/1.0.svg') center/cover no-repeat";
   moonOpacity = 0;
 
-  // TODO: move to environment configuration if needed
-  protected apiKey = '8af80a6de6514dc9ace63d1a1e1dfd56';
+  protected apiKey = environment.moonApiKey;
   myWidth = 0;
   myHeight = 0;
   currentTimeOfDay: string = 'def';
